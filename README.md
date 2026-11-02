@@ -75,6 +75,9 @@ Full steps arrive in Phase 4. In short, `deploy.yml` needs:
 - Variables: `CLOUDFLARE_PROJECT_NAME`, `SITE_URL`, and (temporarily) `ALLOW_TODO=1` while
   placeholders remain. The main deploy fails on any unresolved TODO otherwise.
 
+The deploy job never fails just because it cannot deploy: for Dependabot runs, fork PRs, or
+when the Cloudflare secrets/variables are missing, it skips with a notice and a job summary.
+
 Prod-like local check: `docker compose up --build`, then open <http://localhost:8080>.
 
 ## Decisions

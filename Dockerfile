@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---- Build stage: Node builds the static site into /app/dist ----
+# Node major must match .nvmrc (CI checks this). Dependabot ignores major bumps.
 FROM node:22.23.4-alpine3.24 AS build
 WORKDIR /app
 
