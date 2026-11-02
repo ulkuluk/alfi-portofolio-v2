@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # ---- Build stage: Node builds the static site into /app/dist ----
-FROM node:22.23.4-alpine3.24 AS build
+FROM node:26.13.0-alpine3.24 AS build
 WORKDIR /app
 
 COPY package.json package-lock.json ./
