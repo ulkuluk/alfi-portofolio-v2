@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { site } from '../config/site';
+
+const sections = site.nav.map((item) => ({
+  id: item.href.replace('/#', ''),
+  label: item.label,
+}));
+---
+
+<BaseLayout>
+  <section class="section">
+    <div class="container-content">
+      <h1 class="measure text-4xl sm:text-5xl">{site.hero.headline}</h1>
+      <p class="measure mt-6 text-muted">
+        {site.name} · {site.title.toLowerCase()}
+      </p>
+      <p class="mt-8 flex flex-wrap gap-3">
+        <a class="btn btn-primary" href={site.hero.primaryCta.href}>
+          {site.hero.primaryCta.label}
+        </a>
+        <a class="btn" href={site.hero.secondaryCta.href}>
+          {site.hero.secondaryCta.label}
+        </a>
+      </p>
+      <p class="tag mt-6">{site.availability}</p>
+    </div>
+  </section>
+
+  {sections.map((section) => (
+    <section
+      id={section.id}
+      class="section border-t border-border"
+      aria-labelledby={`${section.id}-title`}
+    >
+      <div class="container-content">
+        <h2 id={`${section.id}-title`} class="text-2xl">
+          {section.label}
+        </h2>
+      </div>
+    </section>
+  ))}
+</BaseLayout>

@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+import { site } from '../config/site';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = site.description } = Astro.props;
+const pageTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.title}`;
+---
+
+<!doctype html>
+<html lang={site.language}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="light dark" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script is:inline src="/theme-init.js"></script>
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <a href="#main" class="sr-only-focusable skip-link">
+      Skip to content
+    </a>
+    <Header />
+    <main id="main" class="fade-in">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  .skip-link {
+    position: absolute;
+    left: 1rem;
+    top: 1rem;
+    z-index: 50;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    background: var(--accent);
+    color: var(--on-accent);
+    font-weight: 600;
+    text-decoration: none;
+  }
+</style>

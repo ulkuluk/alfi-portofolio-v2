@@ -1,0 +1,92 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+  schedule:
+    # Weekly external link check (Mondays 03:00 UTC).
+    - cron: '0 3 * * 1'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Type and template check
+        run: npm run check
+
+      - name: List TODO placeholders
+        run: |
+          npm run check:todo
+          echo "::warning::Unresolved TODO placeholders remain. The main deploy fails on them unless ALLOW_TODO=1."
+
+      - name: Build
+        run: npm run build
+
+      - name: Internal link check
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          args: >-
+            --offline --no-progress --include-fragments
+            --root-dir ${{ github.workspace }}/dist
+            --fallback-extensions html
+            --exclude TODO
+            './dist/**/*.html'
+          fail: true
+
+      - name: Lighthouse CI
+        run: npm run lhci
+
+  external-links:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: External link check
+        uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
+        with:
+          args: >-
+            --no-progress
+            --root-dir ${{ github.workspace }}/dist
+            --fallback-extensions html
+            --exclude TODO
+            --max-retries 2
+            './dist/**/*.html'
+          fail: true

@@ -1,0 +1,240 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------
+   Fonts (self-hosted via Fontsource, Latin subset only).
+   Body: Source Sans 3, a humanist sans that stays readable at 17px+.
+   Headings: Fraunces, a soft serif that gives the page some personality.
+   ------------------------------------------------------------------ */
+@font-face {
+  font-family: 'Source Sans 3 Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url('../../node_modules/@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2')
+    format('woff2-variations');
+}
+@font-face {
+  font-family: 'Fraunces Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url('../../node_modules/@fontsource-variable/fraunces/files/fraunces-latin-wght-normal.woff2')
+    format('woff2-variations');
+}
+
+/* ------------------------------------------------------------------
+   Design tokens. This is the only place colours are defined.
+   To change the accent, edit --accent (light) and --accent (dark).
+   ------------------------------------------------------------------ */
+:root {
+  color-scheme: light;
+  --bg: #fafaf8;
+  --surface: #ffffff;
+  --text: #1a1a18;
+  --muted: #6b6b66;
+  --border: #e7e5e0;
+  --accent: #0f766e;
+  /* Text colour on top of an accent-filled background. */
+  --on-accent: #ffffff;
+
+  --font-sans:
+    'Source Sans 3 Variable', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-serif: 'Fraunces Variable', ui-serif, Georgia, 'Times New Roman', serif;
+  --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --width-content: 1040px;
+  --width-text: 680px;
+  --space-section: clamp(4.5rem, 10vw, 7rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    color-scheme: dark;
+    --bg: #121211;
+    --surface: #1a1a18;
+    --text: #ecece8;
+    --muted: #a3a39c;
+    --border: #2b2b28;
+    --accent: #4fd1c5;
+    --on-accent: #121211;
+  }
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+  --bg: #121211;
+  --surface: #1a1a18;
+  --text: #ecece8;
+  --muted: #a3a39c;
+  --border: #2b2b28;
+  --accent: #4fd1c5;
+  --on-accent: #121211;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --font-sans: var(--font-sans);
+  --font-serif: var(--font-serif);
+  --font-mono: var(--font-mono);
+}
+
+/* ------------------------------------------------------------------
+   Base styles
+   ------------------------------------------------------------------ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: 1.0625rem; /* 17px */
+    line-height: 1.65;
+    overflow-wrap: break-word;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  a {
+    color: var(--accent);
+    text-underline-offset: 0.2em;
+    transition: color 150ms ease;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  code,
+  kbd {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--accent) 25%, transparent);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Small shared building blocks
+   ------------------------------------------------------------------ */
+@layer components {
+  .container-content {
+    width: 100%;
+    max-width: calc(var(--width-content) + 3rem);
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  .measure {
+    max-width: var(--width-text);
+  }
+
+  .section {
+    padding-block: var(--space-section);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 0.5rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text);
+    background: var(--surface);
+    transition:
+      border-color 150ms ease,
+      background-color 150ms ease,
+      color 150ms ease;
+  }
+  .btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .btn-primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+  }
+  .btn-primary:hover {
+    background: transparent;
+    color: var(--accent);
+  }
+
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    transition: border-color 150ms ease;
+  }
+  .card:hover {
+    border-color: var(--accent);
+  }
+}
+
+/* ------------------------------------------------------------------
+   Motion: one subtle fade-in, disabled for reduced-motion users.
+   ------------------------------------------------------------------ */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.fade-in {
+  animation: fade-in 400ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* Visually hidden, but available to assistive tech. */
+.sr-only-focusable:not(:focus):not(:focus-within) {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

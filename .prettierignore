@@ -1,0 +1,6 @@
+dist/
+.astro/
+node_modules/
+.lighthouseci/
+package-lock.json
+devops-portfolio-agent-prompt.md

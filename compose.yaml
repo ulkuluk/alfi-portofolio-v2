@@ -1,0 +1,17 @@
+# Prod-like local check: `docker compose up --build`, then open http://localhost:8080
+services:
+  web:
+    build:
+      context: .
+      args:
+        SITE_URL: http://localhost:8080
+    ports:
+      - '8080:8080'
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    restart: unless-stopped

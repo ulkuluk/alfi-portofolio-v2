@@ -1,0 +1,12 @@
+node_modules
+dist
+.astro
+.git
+.github
+.lighthouseci
+.wrangler
+.env
+.env.*
+*.log
+docs
+devops-portfolio-agent-prompt.md
