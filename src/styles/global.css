@@ -200,6 +200,50 @@
   .card:hover {
     border-color: var(--accent);
   }
+
+  /* Inline SVG diagrams. Classes only, because the CSP blocks style attributes. */
+  .diagram svg {
+    display: block;
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+  }
+  .d-box {
+    fill: var(--surface);
+    stroke: var(--border);
+    stroke-width: 1.5;
+  }
+  .d-box-accent {
+    fill: var(--surface);
+    stroke: var(--accent);
+    stroke-width: 1.5;
+  }
+  .d-zone {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 1.5;
+    stroke-dasharray: 6 5;
+  }
+  .d-line {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 1.5;
+  }
+  .d-arrow {
+    fill: var(--muted);
+  }
+  .d-title {
+    fill: var(--text);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .d-sub,
+  .d-label {
+    fill: var(--muted);
+    font-family: var(--font-sans);
+    font-size: 12.5px;
+  }
 }
 
 /* ------------------------------------------------------------------

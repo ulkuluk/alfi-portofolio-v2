@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 600" role="img" aria-labelledby="bc-title bc-desc">
+  <!-- {{TODO: review diagram for accuracy}} -->
+  <title id="bc-title">Delivery flow for the bootcamp e-commerce project</title>
+  <desc id="bc-desc">A merge to the dev, uat or main branch starts the general pipeline, and the branch name picks the environment. The pipeline scans, builds, pushes images tagged with the commit SHA to a registry, and runs deploy.sh. The gitops-ecm repo holds Kustomize bases and overlays. The Kubernetes cluster has one namespace each for dev, uat and prod, with an autoscaler only in prod, and Traefik ingress in front of the portal, the APIs and MySQL. Prometheus scrapes the cluster and feeds Grafana.</desc>
+  <defs>
+    <marker id="bc-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" class="d-arrow" />
+    </marker>
+  </defs>
+
+  <rect class="d-zone" x="40" y="300" width="400" height="184" rx="10" />
+  <text class="d-label" x="56" y="322">Kubernetes, one namespace per environment</text>
+
+  <rect class="d-box" x="96" y="16" width="220" height="56" rx="8" />
+  <text class="d-title" x="206" y="41" text-anchor="middle">Merge</text>
+  <text class="d-sub" x="206" y="60" text-anchor="middle">dev · uat · main</text>
+
+  <rect class="d-box-accent" x="96" y="112" width="220" height="64" rx="8" />
+  <text class="d-title" x="206" y="139" text-anchor="middle">general-pipeline</text>
+  <text class="d-sub" x="206" y="159" text-anchor="middle">scan · build · push · deploy.sh</text>
+
+  <rect class="d-box" x="350" y="112" width="116" height="64" rx="8" />
+  <text class="d-title" x="408" y="139" text-anchor="middle">Registry</text>
+  <text class="d-sub" x="408" y="159" text-anchor="middle">SHA tags</text>
+
+  <rect class="d-box" x="350" y="196" width="116" height="56" rx="8" />
+  <text class="d-title" x="408" y="221" text-anchor="middle">gitops-ecm</text>
+  <text class="d-sub" x="408" y="240" text-anchor="middle">base + overlays</text>
+
+  <rect class="d-box" x="60" y="336" width="112" height="56" rx="8" />
+  <text class="d-title" x="116" y="361" text-anchor="middle">dev</text>
+  <text class="d-sub" x="116" y="380" text-anchor="middle">overlay</text>
+
+  <rect class="d-box" x="184" y="336" width="112" height="56" rx="8" />
+  <text class="d-title" x="240" y="361" text-anchor="middle">uat</text>
+  <text class="d-sub" x="240" y="380" text-anchor="middle">overlay</text>
+
+  <rect class="d-box" x="308" y="336" width="112" height="56" rx="8" />
+  <text class="d-title" x="364" y="361" text-anchor="middle">prod</text>
+  <text class="d-sub" x="364" y="380" text-anchor="middle">overlay + HPA</text>
+
+  <rect class="d-box" x="60" y="408" width="360" height="56" rx="8" />
+  <text class="d-title" x="240" y="433" text-anchor="middle">Traefik ingress</text>
+  <text class="d-sub" x="240" y="452" text-anchor="middle">portal · 5 APIs · MySQL</text>
+
+  <rect class="d-box" x="130" y="520" width="220" height="64" rx="8" />
+  <text class="d-title" x="240" y="547" text-anchor="middle">Prometheus → Grafana</text>
+  <text class="d-sub" x="240" y="567" text-anchor="middle">cAdvisor · node-exporter</text>
+
+  <path class="d-line" d="M206 72V108" marker-end="url(#bc-arrow)" />
+  <path class="d-line" d="M316 144H346" marker-end="url(#bc-arrow)" />
+  <path class="d-line" d="M206 176V296" marker-end="url(#bc-arrow)" />
+  <path class="d-line" d="M408 252V296" marker-end="url(#bc-arrow)" />
+  <path class="d-line" d="M240 520V488" marker-end="url(#bc-arrow)" />
+
+  <text class="d-label" x="216" y="96">branch picks the environment</text>
+  <text class="d-label" x="216" y="240">deploy.sh</text>
+  <text class="d-label" x="250" y="506">scrapes</text>
+</svg>

@@ -1,11 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 import { site } from '../config/site';
+import { getProjects } from '../lib/projects';
 
-const sections = site.nav.map((item) => ({
-  id: item.href.replace('/#', ''),
-  label: item.label,
-}));
+const projects = (await getProjects()).filter((project) => project.data.featured);
+
+// Phase 3 replaces these placeholders with the real sections.
+const placeholders = site.nav
+  .map((item) => ({ id: item.href.replace('/#', ''), label: item.label }))
+  .filter((section) => section.id !== 'projects');
 ---
 
 <BaseLayout>
@@ -27,7 +31,20 @@ const sections = site.nav.map((item) => ({
     </div>
   </section>
 
-  {sections.map((section) => (
+  <section id="projects" class="section border-t border-border" aria-labelledby="projects-title">
+    <div class="container-content">
+      <h2 id="projects-title" class="text-2xl">
+        Projects
+      </h2>
+      <ul class="mt-8 grid gap-6 md:grid-cols-2">
+        {projects.map((project) => (
+          <ProjectCard project={project} />
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  {placeholders.map((section) => (
     <section
       id={section.id}
       class="section border-t border-border"

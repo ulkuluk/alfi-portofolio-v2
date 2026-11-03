@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 410" role="img" aria-labelledby="ob-title ob-desc">
+  <!-- {{TODO: review diagram for accuracy}} -->
+  <title id="ob-title">How secrets move from OpenBao to Kubernetes workloads</title>
+  <desc id="ob-desc">People sign in to OpenBao with Google OIDC. External Secrets Operator reads secrets from OpenBao and writes Kubernetes Secrets, using ExternalSecret manifests that a Bash script generates. A workload reads the Secret, and Reloader watches the Secret and restarts the workload when it changes.</desc>
+  <defs>
+    <marker id="ob-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" class="d-arrow" />
+    </marker>
+  </defs>
+
+  <rect class="d-box" x="10" y="20" width="160" height="64" rx="8" />
+  <text class="d-title" x="90" y="47" text-anchor="middle">People</text>
+  <text class="d-sub" x="90" y="67" text-anchor="middle">Google OIDC login</text>
+
+  <rect class="d-box-accent" x="230" y="20" width="240" height="64" rx="8" />
+  <text class="d-title" x="350" y="47" text-anchor="middle">OpenBao</text>
+  <text class="d-sub" x="350" y="67" text-anchor="middle">KV v2 · team ACL policies</text>
+
+  <rect class="d-box" x="10" y="120" width="160" height="64" rx="8" />
+  <text class="d-title" x="90" y="147" text-anchor="middle">Bash script</text>
+  <text class="d-sub" x="90" y="167" text-anchor="middle">generates manifests</text>
+
+  <rect class="d-box" x="230" y="120" width="240" height="64" rx="8" />
+  <text class="d-title" x="350" y="147" text-anchor="middle">External Secrets Operator</text>
+  <text class="d-sub" x="350" y="167" text-anchor="middle">SecretStore → ExternalSecret</text>
+
+  <rect class="d-box" x="230" y="220" width="240" height="64" rx="8" />
+  <text class="d-title" x="350" y="247" text-anchor="middle">Kubernetes Secret</text>
+  <text class="d-sub" x="350" y="267" text-anchor="middle">kept in sync by the operator</text>
+
+  <rect class="d-box" x="230" y="320" width="240" height="64" rx="8" />
+  <text class="d-title" x="350" y="347" text-anchor="middle">Workload</text>
+  <text class="d-sub" x="350" y="367" text-anchor="middle">reads the Secret with envFrom</text>
+
+  <rect class="d-box" x="10" y="320" width="160" height="64" rx="8" />
+  <text class="d-title" x="90" y="347" text-anchor="middle">Reloader</text>
+  <text class="d-sub" x="90" y="367" text-anchor="middle">restarts on change</text>
+
+  <path class="d-line" d="M170 52H226" marker-end="url(#ob-arrow)" />
+  <path class="d-line" d="M170 152H226" marker-end="url(#ob-arrow)" />
+  <path class="d-line" d="M350 84V116" marker-end="url(#ob-arrow)" />
+  <path class="d-line" d="M350 184V216" marker-end="url(#ob-arrow)" />
+  <path class="d-line" d="M350 284V316" marker-end="url(#ob-arrow)" />
+  <path class="d-line" d="M170 352H226" marker-end="url(#ob-arrow)" />
+  <path class="d-line" d="M230 252H90V316" marker-end="url(#ob-arrow)" />
+
+  <text class="d-label" x="360" y="105">reads</text>
+  <text class="d-label" x="360" y="205">writes</text>
+  <text class="d-label" x="360" y="305">used by</text>
+  <text class="d-label" x="100" y="244">watches</text>
+</svg>

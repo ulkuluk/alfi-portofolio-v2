@@ -2,7 +2,12 @@
   "ci": {
     "collect": {
       "staticDistDir": "./dist",
-      "url": ["http://localhost/index.html", "http://localhost/colophon.html"],
+      "url": [
+        "http://localhost/index.html",
+        "http://localhost/colophon.html",
+        "http://localhost/projects/openbao-migration.html",
+        "http://localhost/projects/devops-bootcamp-final-project.html"
+      ],
       "numberOfRuns": 1,
       "settings": {
         "chromeFlags": "--no-sandbox --headless=new"

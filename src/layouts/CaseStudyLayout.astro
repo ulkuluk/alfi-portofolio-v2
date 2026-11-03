@@ -1,0 +1,217 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { typeLabels, type Project } from '../lib/projects';
+
+interface Neighbour {
+  id: string;
+  title: string;
+}
+
+interface Props {
+  project: Project;
+  /** Inline SVG markup for the diagram, if the project has one. */
+  diagram?: string;
+  prev?: Neighbour;
+  next?: Neighbour;
+}
+
+const { project, diagram, prev, next } = Astro.props;
+const { title, summary, type, org, role, period, status, stack, repo } = project.data;
+
+const glance = [
+  { label: 'Role', value: role },
+  { label: 'Organisation', value: org },
+  { label: 'Period', value: period },
+  { label: 'Status', value: status },
+];
+const hasFigure = Astro.slots.has('figure');
+---
+
+<BaseLayout title={title} description={summary}>
+  <article class="section">
+    <div class="container-content">
+      <p>
+        <a href="/#projects" class="back">
+          ← All projects
+        </a>
+      </p>
+
+      <header class="measure mt-8">
+        <p class="tag">{typeLabels[type]}</p>
+        <h1 class="mt-2 text-4xl sm:text-5xl">{title}</h1>
+        <p class="mt-5 text-lg text-muted">{summary}</p>
+      </header>
+
+      <section aria-labelledby="glance-title" class="glance mt-10">
+        <h2 id="glance-title" class="sr-only">
+          At a glance
+        </h2>
+        <dl>
+          {glance.map((item) => (
+            <div>
+              <dt>{item.label}</dt>
+              <dd>{item.value}</dd>
+            </div>
+          ))}
+          <div>
+            <dt>Stack</dt>
+            <dd>
+              <ul class="flex flex-wrap gap-x-3 gap-y-1">
+                {stack.map((item) => (
+                  <li class="tag">{item}</li>
+                ))}
+              </ul>
+            </dd>
+          </div>
+        </dl>
+      </section>
+
+      <div class="prose measure mt-12">
+        <slot />
+      </div>
+
+      {diagram && (
+        <section class="mt-16" aria-labelledby="diagram-title">
+          <h2 id="diagram-title" class="text-2xl">
+            How it fits together
+          </h2>
+          <figure class="diagram mt-6" set:html={diagram} />
+        </section>
+      )}
+
+      {hasFigure && (
+        <figure class="measure mt-12">
+          <slot name="figure" />
+        </figure>
+      )}
+
+      {repo && (
+        <p class="measure mt-12">
+          <a href={repo}>Source repository →</a>
+        </p>
+      )}
+
+      <nav class="pager mt-20" aria-label="More case studies">
+        {prev && (
+          <a href={`/projects/${prev.id}`} rel="prev">
+            <span class="tag">Previous</span>
+            <span class="pager-title">← {prev.title}</span>
+          </a>
+        )}
+        {next && (
+          <a href={`/projects/${next.id}`} rel="next" class="pager-next">
+            <span class="tag">Next</span>
+            <span class="pager-title">{next.title} →</span>
+          </a>
+        )}
+      </nav>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .back {
+    color: var(--muted);
+    text-decoration: none;
+    font-size: 0.9375rem;
+  }
+  .back:hover {
+    color: var(--accent);
+  }
+
+  .glance dl {
+    display: grid;
+    gap: 1.25rem 2rem;
+    padding-block: 1.5rem;
+    border-block: 1px solid var(--border);
+  }
+  @media (min-width: 640px) {
+    .glance dl {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .glance dt {
+    font-size: 0.8125rem;
+    color: var(--muted);
+  }
+  .glance dd {
+    margin: 0.125rem 0 0;
+  }
+
+  .pager {
+    display: grid;
+    gap: 1rem;
+    border-top: 1px solid var(--border);
+    padding-top: 2rem;
+  }
+  @media (min-width: 640px) {
+    .pager {
+      grid-template-columns: 1fr 1fr;
+    }
+    .pager-next {
+      grid-column: 2;
+      text-align: right;
+    }
+  }
+  .pager a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-decoration: none;
+  }
+  .pager-title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.125rem;
+  }
+  .pager a:hover .pager-title {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
+  }
+
+  /* Styles for the rendered Markdown body. */
+  .prose :global(h2) {
+    margin-top: 3rem;
+    font-size: 1.5rem;
+  }
+  .prose :global(h2:first-child) {
+    margin-top: 0;
+  }
+  .prose :global(h3) {
+    margin-top: 2rem;
+    font-size: 1.125rem;
+  }
+  .prose :global(p),
+  .prose :global(ul),
+  .prose :global(ol) {
+    margin-top: 1rem;
+  }
+  .prose :global(h2 + p),
+  .prose :global(h3 + ol),
+  .prose :global(h3 + ul),
+  .prose :global(h3 + p) {
+    margin-top: 0.75rem;
+  }
+  .prose :global(ul) {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  .prose :global(ol) {
+    list-style: decimal;
+    padding-left: 1.5rem;
+  }
+  .prose :global(li) {
+    margin-top: 0.5rem;
+    padding-left: 0.25rem;
+  }
+  .prose :global(li::marker) {
+    color: var(--muted);
+  }
+  .prose :global(code) {
+    padding: 0.1em 0.35em;
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    background: var(--surface);
+    overflow-wrap: anywhere;
+  }
+</style>

@@ -8,7 +8,7 @@ export const site = {
   url: 'https://example.com', // {{TODO: domain}}
   language: 'en',
 
-  name: '{{TODO: full name}}',
+  name: 'Muhammad Alfi Ramadhan',
   role: 'Aspiring DevOps Engineer / DevOps Intern',
   location: '{{TODO: city}}, Indonesia',
   title: 'Aspiring DevOps engineer',
@@ -25,15 +25,15 @@ export const site = {
   availability: 'Open to DevOps internship and junior roles {{TODO: confirm availability}}',
 
   contact: {
-    email: '{{TODO: email}}',
-    linkedin: '{{TODO: LinkedIn URL}}',
-    github: '{{TODO: GitHub profile URL}}',
+    email: 'alfiram.03@gmail.com',
+    linkedin: 'https://www.linkedin.com/in/muhammad-alfi-ramadhan-666677268/',
+    github: 'https://github.com/ulkuluk',
     /** Path under /public. The button is hidden when the file does not exist. */
     resume: '/resume.pdf',
   },
 
   /** Public source repository, shown in the footer. */
-  repo: '{{TODO: source repo URL}}',
+  repo: 'https://github.com/ulkuluk/alfi-portofolio-v2',
 
   /** Optional portrait under /public. Leave empty to hide the slot. */
   portrait: '',

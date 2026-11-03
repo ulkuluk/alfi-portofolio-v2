@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 398" role="img" aria-labelledby="pp-title pp-desc">
+  <!-- {{TODO: review diagram for accuracy}} -->
+  <title id="pp-title">petepete infrastructure on Tencent Cloud</title>
+  <desc id="pp-desc">Teammates and users reach the app server through Cloudflare Tunnel and Cloudflare Access. The app server sits in a public subnet of a VPC and runs the frontend and backend with Docker Compose. The managed PostgreSQL database sits in a private subnet and allows traffic by referencing the app server's security group. A GitLab runner deploys to the app server over SSH, and the app server issues presigned URLs for object storage.</desc>
+  <defs>
+    <marker id="pp-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" class="d-arrow" />
+    </marker>
+  </defs>
+
+  <rect class="d-zone" x="136" y="132" width="208" height="250" rx="10" />
+  <text class="d-label" x="146" y="372">Tencent Cloud VPC, Jakarta</text>
+
+  <rect class="d-box" x="150" y="16" width="180" height="56" rx="8" />
+  <text class="d-title" x="240" y="41" text-anchor="middle">Team and users</text>
+  <text class="d-sub" x="240" y="60" text-anchor="middle">browser · SSH</text>
+
+  <rect class="d-box-accent" x="160" y="160" width="160" height="76" rx="8" />
+  <text class="d-title" x="240" y="184" text-anchor="middle">App server (VM)</text>
+  <text class="d-sub" x="240" y="203" text-anchor="middle">public subnet</text>
+  <text class="d-sub" x="240" y="221" text-anchor="middle">Next.js + .NET, Compose</text>
+
+  <rect class="d-box" x="160" y="300" width="160" height="56" rx="8" />
+  <text class="d-title" x="240" y="325" text-anchor="middle">PostgreSQL</text>
+  <text class="d-sub" x="240" y="344" text-anchor="middle">private subnet, managed</text>
+
+  <rect class="d-box" x="8" y="170" width="118" height="56" rx="8" />
+  <text class="d-title" x="67" y="195" text-anchor="middle">CI runner</text>
+  <text class="d-sub" x="67" y="214" text-anchor="middle">GitLab, over SSH</text>
+
+  <rect class="d-box" x="354" y="170" width="118" height="56" rx="8" />
+  <text class="d-title" x="413" y="195" text-anchor="middle">Storage</text>
+  <text class="d-sub" x="413" y="214" text-anchor="middle">presigned URLs</text>
+
+  <path class="d-line" d="M240 72V156" marker-end="url(#pp-arrow)" />
+  <path class="d-line" d="M240 236V296" marker-end="url(#pp-arrow)" />
+  <path class="d-line" d="M126 198H156" marker-end="url(#pp-arrow)" />
+  <path class="d-line" d="M320 198H350" marker-end="url(#pp-arrow)" />
+
+  <text class="d-label" x="250" y="108">Cloudflare Tunnel + Access</text>
+  <text class="d-label" x="250" y="272">SG reference</text>
+</svg>

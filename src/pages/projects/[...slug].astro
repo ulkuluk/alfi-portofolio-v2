@@ -1,0 +1,43 @@
+---
+import { render } from 'astro:content';
+import CaseStudyLayout from '../../layouts/CaseStudyLayout.astro';
+import { getProjects } from '../../lib/projects';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  const brief = (index: number) => {
+    const entry = projects[index];
+    return entry ? { id: entry.id, title: entry.data.title } : undefined;
+  };
+
+  return projects.map((entry, index) => ({
+    params: { slug: entry.id },
+    props: { entry, prev: brief(index - 1), next: brief(index + 1) },
+  }));
+}
+
+const { entry, prev, next } = Astro.props;
+const { Content } = await render(entry);
+
+const diagrams = import.meta.glob<string>('/src/assets/diagrams/*.svg', {
+  query: '?raw',
+  import: 'default',
+  eager: true,
+});
+
+let diagram: string | undefined;
+if (entry.data.diagram) {
+  const raw = diagrams[`/${entry.data.diagram}`];
+  if (!raw) {
+    throw new Error(
+      `src/content/projects/${entry.id}.md: diagram file "${entry.data.diagram}" does not exist.`,
+    );
+  }
+  // Drop XML comments (they hold review notes) before inlining.
+  diagram = raw.replace(/<!--[\s\S]*?-->/g, '').trim();
+}
+---
+
+<CaseStudyLayout project={entry} diagram={diagram} prev={prev} next={next}>
+  <Content />
+</CaseStudyLayout>
