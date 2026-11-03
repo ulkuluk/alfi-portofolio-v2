@@ -9,7 +9,7 @@ const year = new Date().getFullYear();
     <p>
       © {year} {site.name}
     </p>
-    <ul class="flex flex-wrap gap-x-2">
+    <ul role="list" class="flex flex-wrap gap-x-2">
       <li>
         Built with <a href="https://astro.build">Astro</a>
       </li>
@@ -24,3 +24,11 @@ const year = new Date().getFullYear();
     </ul>
   </div>
 </footer>
+
+<style>
+  /* Comfortable tap target for the small footer links. */
+  li a {
+    display: inline-block;
+    padding-block: 0.375rem;
+  }
+</style>

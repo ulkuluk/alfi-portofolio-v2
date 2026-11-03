@@ -23,7 +23,7 @@ import ThemeToggle from './ThemeToggle.astro';
     </div>
 
     <nav id="primary-nav" class="nav" aria-label="Primary">
-      <ul>
+      <ul role="list">
         {site.nav.map((item) => (
           <li>
             <a href={item.href}>{item.label}</a>
@@ -157,6 +157,9 @@ import ThemeToggle from './ThemeToggle.astro';
     ?.querySelectorAll('nav a')
     .forEach((link) => link.addEventListener('click', () => setOpen(false)));
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') setOpen(false);
+    if (event.key !== 'Escape' || toggle?.getAttribute('aria-expanded') !== 'true') return;
+    setOpen(false);
+    // Put focus back on the button so keyboard users are not left on a hidden link.
+    toggle.focus();
   });
 </script>

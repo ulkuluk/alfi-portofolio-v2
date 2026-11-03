@@ -33,7 +33,9 @@
   --text: #1a1a18;
   --muted: #6b6b66;
   --border: #e7e5e0;
-  --accent: #0f766e;
+  /* THE accent. Change this one value; dark mode derives a lighter tint from it. */
+  --accent-base: #0f766e;
+  --accent: var(--accent-base);
   /* Text colour on top of an accent-filled background. */
   --on-accent: #ffffff;
 
@@ -55,7 +57,7 @@
     --text: #ecece8;
     --muted: #a3a39c;
     --border: #2b2b28;
-    --accent: #4fd1c5;
+    --accent: color-mix(in oklab, var(--accent-base) 50%, white);
     --on-accent: #121211;
   }
 }
@@ -67,7 +69,7 @@
   --text: #ecece8;
   --muted: #a3a39c;
   --border: #2b2b28;
-  --accent: #4fd1c5;
+  --accent: color-mix(in oklab, var(--accent-base) 50%, white);
   --on-accent: #121211;
 }
 
@@ -112,10 +114,18 @@
     letter-spacing: -0.01em;
   }
 
+  /* Links are underlined so they never rely on colour alone. Buttons, nav and cards turn it off. */
   a {
     color: var(--accent);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
     text-underline-offset: 0.2em;
     transition: color 150ms ease;
+  }
+
+  /* The skip link moves focus here; the whole region does not need a focus ring. */
+  main:focus {
+    outline: none;
   }
 
   :focus-visible {
