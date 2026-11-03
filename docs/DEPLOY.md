@@ -22,8 +22,8 @@ The `wrangler.jsonc` in this repo is already configured:
   "compatibility_date": "2026-11-03",
   "assets": {
     "directory": "./dist",
-    "not_found_handling": "404-page"
-  }
+    "not_found_handling": "404-page",
+  },
 }
 ```
 
@@ -42,11 +42,11 @@ The `wrangler.jsonc` in this repo is already configured:
 1. Go to **Cloudflare dashboard → Workers & Pages → Create → Worker**.
 2. Choose **Connect to Git** and authorise GitHub.
 3. Pick this repository and set:
-   | Field           | Value               |
-   |-----------------|---------------------|
-   | Build command   | `npm run build`     |
-   | Deploy command  | `npx wrangler deploy` |
-   | Root directory  | *(leave blank)*     |
+   | Field          | Value                 |
+   | -------------- | --------------------- |
+   | Build command  | `npm run build`       |
+   | Deploy command | `npx wrangler deploy` |
+   | Root directory | _(leave blank)_       |
 4. Click **Save and Deploy**. Cloudflare runs the first build and deploy from its own
    infrastructure. Every subsequent push to `main` triggers a new deploy automatically.
 
@@ -74,10 +74,10 @@ Find your **Account ID** in the Cloudflare dashboard sidebar (any zone page, or 
 
 In **Settings → Secrets and variables → Actions → Variables** (not secrets):
 
-| Name         | Value                         | Notes                                                                              |
-|--------------|-------------------------------|------------------------------------------------------------------------------------|
-| `SITE_URL`   | e.g. `https://yourdomain.com` | Used to build canonical URLs; must match `url` in `src/config/site.ts`             |
-| `ALLOW_TODO` | `1`                           | Set while any TODO placeholder remains. Remove it before going fully public.       |
+| Name         | Value                         | Notes                                                                        |
+| ------------ | ----------------------------- | ---------------------------------------------------------------------------- |
+| `SITE_URL`   | e.g. `https://yourdomain.com` | Used to build canonical URLs; must match `url` in `src/config/site.ts`       |
+| `ALLOW_TODO` | `1`                           | Set while any TODO placeholder remains. Remove it before going fully public. |
 
 > `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are **not** needed as GitHub
 > secrets — Workers Builds authenticates on Cloudflare's side, not through Actions.
@@ -106,10 +106,10 @@ canonical URL and the sitemap.
 
 `deploy.yml` is renamed **"Deploy gate"** and does **not** call wrangler. Its role:
 
-| Trigger        | What it does                                                        |
-|----------------|---------------------------------------------------------------------|
+| Trigger        | What it does                                                              |
+| -------------- | ------------------------------------------------------------------------- |
 | Push to `main` | Fails if any TODO placeholder remains (unless `ALLOW_TODO=1`); runs build |
-| Pull request   | Runs build only (placeholders are allowed on PRs)                   |
+| Pull request   | Runs build only (placeholders are allowed on PRs)                         |
 
 Workers Builds handles the actual deploy independently on every push to `main`.
 The two pipelines are complementary: Actions blocks a bad push before Cloudflare
