@@ -2,4 +2,4 @@ User-agent: *
 Allow: /
 
 # {{TODO: replace example.com with the real domain}}
-Sitemap: https://example.com/sitemap-index.xml
+Sitemap: https://alfi-portofolio-v2.alfiram-03.workers.dev/sitemap-index.xml

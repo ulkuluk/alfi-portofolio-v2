@@ -5,7 +5,7 @@
  */
 export const site = {
   /** Canonical origin, no trailing slash. Also set SITE_URL in CI to match. */
-  url: 'https://example.com', // {{TODO: domain}}
+  url: 'https://alfi-portofolio-v2.alfiram-03.workers.dev', // {{TODO: domain}}
   language: 'en',
 
   name: 'Muhammad Alfi Ramadhan',
