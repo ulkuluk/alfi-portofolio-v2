@@ -3,6 +3,7 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 export type Project = CollectionEntry<'projects'>;
 
 export const typeLabels = {
+  work: 'Work',
   internship: 'Internship',
   team: 'Team project',
   bootcamp: 'Bootcamp',

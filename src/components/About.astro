@@ -1,0 +1,24 @@
+---
+import { site } from '../config/site';
+import SectionHeading from './SectionHeading.astro';
+
+const { paragraphs, howIWork } = site.about;
+---
+
+<section id="about" class="section border-t border-border" aria-labelledby="about-title">
+  <div class="container-content">
+    <SectionHeading id="about" />
+    <div class="measure mt-8 space-y-4">
+      {paragraphs.map((text) => (
+        <p>{text}</p>
+      ))}
+    </div>
+
+    <h3 class="mt-14 text-xl">How I work</h3>
+    <div class="measure mt-4 space-y-4">
+      {howIWork.map((text) => (
+        <p>{text}</p>
+      ))}
+    </div>
+  </div>
+</section>

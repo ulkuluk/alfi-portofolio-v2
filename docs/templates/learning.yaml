@@ -1,0 +1,9 @@
+# Paste into src/content/learning.yaml. The key (first line) must be unique.
+#   kind:  timeline (past to present) | current (learning now) | next (up next)
+#   order: lower comes first within its kind
+example-item:
+  kind: timeline
+  order: 6
+  period: Jan 2027
+  title: What happened
+  text: One sentence, optional.

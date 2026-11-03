@@ -1,12 +1,35 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import diagram from '../assets/diagrams/colophon.svg?raw';
 ---
 
-<BaseLayout title="Colophon">
+<BaseLayout title="Colophon" description="How this portfolio site is built, checked and deployed.">
   <section class="section">
-    <div class="container-content measure">
-      <h1 class="text-4xl">Colophon</h1>
-      <p class="mt-4 text-muted">How this site is built. A fuller write-up is coming.</p>
+    <div class="container-content">
+      <h1 class="measure text-4xl sm:text-5xl">Colophon</h1>
+      <div class="measure mt-6 space-y-4">
+        <p>
+          This site is static HTML built with Astro and styled with Tailwind CSS on a small set of
+          colour tokens. Case studies, experience and skills are plain Markdown and YAML files, so I
+          can update the site without touching code. It uses Fraunces and Source Sans 3, hosted on
+          the site itself, with no analytics and no cookies.
+        </p>
+        <p>
+          Every change goes through GitHub Actions: lint, formatting, type and link checks, a build,
+          and Lighthouse budgets of 95 or more. A push to <code>main</code> deploys to Cloudflare
+          Pages.
+        </p>
+      </div>
+      <figure class="diagram mt-12" set:html={diagram} />
     </div>
   </section>
 </BaseLayout>
+
+<style>
+  code {
+    padding: 0.1em 0.35em;
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    background: var(--surface);
+  }
+</style>

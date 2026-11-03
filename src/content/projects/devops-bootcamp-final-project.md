@@ -2,9 +2,10 @@
 title: DevOps Bootcamp Final Project
 summary: A multi-service e-commerce app needed a repeatable way to ship to dev, UAT and prod, and a way to watch it run.
 type: bootcamp
+short: Bootcamp
 org: Dibimbing
-role: Student, DevOps Engineer Bootcamp
-period: '{{TODO: bootcamp dates}}'
+role: Student, DevOps Engineering Bootcamp
+period: April – August 2026
 status: 'Bootcamp capstone {{TODO: confirm final outcome}}'
 order: 4
 featured: true

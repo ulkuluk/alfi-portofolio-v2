@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 400" role="img" aria-labelledby="co-title co-desc">
+  <title id="co-title">How a change reaches this site</title>
+  <desc id="co-desc">A commit is pushed to GitHub. CI runs lint, format, type and link checks, then builds the site and runs Lighthouse. A push to main then deploys the built site to Cloudflare Pages.</desc>
+  <defs>
+    <marker id="co-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0L10 5L0 10z" class="d-arrow" />
+    </marker>
+  </defs>
+
+  <rect class="d-box" x="110" y="16" width="260" height="64" rx="8" />
+  <text class="d-title" x="240" y="43" text-anchor="middle">Commit</text>
+  <text class="d-sub" x="240" y="63" text-anchor="middle">pushed to GitHub</text>
+
+  <rect class="d-box" x="110" y="116" width="260" height="64" rx="8" />
+  <text class="d-title" x="240" y="143" text-anchor="middle">CI checks</text>
+  <text class="d-sub" x="240" y="163" text-anchor="middle">lint · format · types · links</text>
+
+  <rect class="d-box" x="110" y="216" width="260" height="64" rx="8" />
+  <text class="d-title" x="240" y="243" text-anchor="middle">Build</text>
+  <text class="d-sub" x="240" y="263" text-anchor="middle">static HTML, then Lighthouse ≥ 95</text>
+
+  <rect class="d-box-accent" x="110" y="316" width="260" height="64" rx="8" />
+  <text class="d-title" x="240" y="343" text-anchor="middle">Deploy</text>
+  <text class="d-sub" x="240" y="363" text-anchor="middle">Cloudflare Pages, on main</text>
+
+  <path class="d-line" d="M240 80V112" marker-end="url(#co-arrow)" />
+  <path class="d-line" d="M240 180V212" marker-end="url(#co-arrow)" />
+  <path class="d-line" d="M240 280V312" marker-end="url(#co-arrow)" />
+</svg>

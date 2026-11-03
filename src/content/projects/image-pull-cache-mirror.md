@@ -1,10 +1,11 @@
 ---
 title: Image Pull-Cache Mirror
 summary: Every node pulled the same images from external registries on its own, which costs avoidable egress and risks registry rate limits.
-type: internship
+type: work
+short: Spegel
 org: Kumparan
-role: DevOps Intern
-period: '{{TODO: internship dates}}'
+role: Site Reliability Engineer
+period: August 2026 – present
 status: Running in a staging cluster of about 15 nodes
 order: 2
 featured: true

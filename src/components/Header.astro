@@ -52,6 +52,9 @@ import ThemeToggle from './ThemeToggle.astro';
     padding-block: 0.75rem;
   }
   .brand {
+    /* On phones the name may wrap so the menu and theme buttons stay on the same row. */
+    flex: 1 1 0;
+    min-width: 0;
     font-family: var(--font-serif);
     font-weight: 600;
     color: var(--text);
@@ -122,6 +125,9 @@ import ThemeToggle from './ThemeToggle.astro';
   }
 
   @media (min-width: 768px) {
+    .brand {
+      flex: 0 0 auto;
+    }
     .nav {
       order: 2;
       width: auto;

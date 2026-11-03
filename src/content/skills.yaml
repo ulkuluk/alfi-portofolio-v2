@@ -1,0 +1,126 @@
+# One skill per entry; the key is a unique id.
+#   level:    hands-on | familiar | exploring
+#   category: cloud | containers | cicd | security | observability | networking | linux | web
+#   projects: case study slugs where I used it (optional)
+# Group by honesty, not percentage. Remove anything that is not true.
+
+# ---- Hands-on: used in a real project --------------------------------------
+# {{TODO: confirm level for every skill in this group}}
+tencent-cloud:
+  {
+    name: 'Tencent Cloud (VPC, CVM, CAM, COS, TencentDB for PostgreSQL, SES)',
+    level: hands-on,
+    category: cloud,
+    projects: [petepete-infrastructure],
+  }
+docker:
+  {
+    name: Docker,
+    level: hands-on,
+    category: containers,
+    projects: [petepete-infrastructure, devops-bootcamp-final-project],
+  }
+docker-compose:
+  {
+    name: Docker Compose,
+    level: hands-on,
+    category: containers,
+    projects: [petepete-infrastructure, openbao-migration],
+  }
+kubernetes:
+  {
+    name: 'Kubernetes (manifests, namespaces, DaemonSets)',
+    level: hands-on,
+    category: containers,
+    projects: [image-pull-cache-mirror, devops-bootcamp-final-project],
+  }
+helm: { name: Helm, level: hands-on, category: containers, projects: [image-pull-cache-mirror] }
+spegel-containerd:
+  {
+    name: Spegel and containerd mirror config,
+    level: hands-on,
+    category: containers,
+    projects: [image-pull-cache-mirror],
+  }
+gitlab-ci:
+  {
+    name: GitLab CI,
+    level: hands-on,
+    category: cicd,
+    projects: [petepete-infrastructure, devops-bootcamp-final-project],
+  }
+kustomize:
+  { name: Kustomize, level: hands-on, category: cicd, projects: [devops-bootcamp-final-project] }
+sonarqube:
+  { name: SonarQube, level: hands-on, category: cicd, projects: [devops-bootcamp-final-project] }
+openbao-vault:
+  {
+    name: 'OpenBao and Vault basics (OIDC, ACL policies, KV v2)',
+    level: hands-on,
+    category: security,
+    projects: [openbao-migration],
+  }
+external-secrets:
+  {
+    name: External Secrets Operator,
+    level: hands-on,
+    category: security,
+    projects: [openbao-migration],
+  }
+prometheus-grafana:
+  {
+    name: Prometheus metrics and Grafana dashboards,
+    level: hands-on,
+    category: observability,
+    projects: [image-pull-cache-mirror, devops-bootcamp-final-project],
+  }
+cloudflare-tunnel-access:
+  {
+    name: Cloudflare Tunnel and Access,
+    level: hands-on,
+    category: networking,
+    projects: [petepete-infrastructure],
+  }
+traefik:
+  {
+    name: Traefik,
+    level: hands-on,
+    category: networking,
+    projects: [devops-bootcamp-final-project],
+  }
+linux-ubuntu:
+  { name: Linux and Ubuntu, level: hands-on, category: linux, projects: [petepete-infrastructure] }
+systemd: { name: systemd, level: hands-on, category: linux, projects: [petepete-infrastructure] }
+ssh: { name: SSH, level: hands-on, category: linux, projects: [petepete-infrastructure] }
+bash: { name: Bash scripting, level: hands-on, category: linux, projects: [openbao-migration] }
+# From the web developer internship; levels not confirmed yet.
+gcp: { name: 'Google Cloud Platform {{TODO: confirm level}}', level: hands-on, category: cloud }
+nodejs: { name: 'Node.js {{TODO: confirm level}}', level: hands-on, category: web }
+postgresql:
+  {
+    name: 'PostgreSQL {{TODO: confirm level}}',
+    level: hands-on,
+    category: web,
+    projects: [petepete-infrastructure],
+  }
+
+# ---- Familiar --------------------------------------------------------------
+# {{TODO: confirm level for every skill in this group}}
+k8s-resources:
+  { name: Kubernetes resource management and healthchecks, level: familiar, category: containers }
+gitops-layout: { name: GitOps repo structure, level: familiar, category: cicd }
+dns-mail: { name: 'DNS (MX, SPF, DKIM, DMARC)', level: familiar, category: networking }
+vpc-sg: { name: VPC and security-group design, level: familiar, category: networking }
+nextjs-dotnet: { name: Deploying Next.js and .NET apps, level: familiar, category: web }
+
+# ---- Exploring -------------------------------------------------------------
+# {{TODO: confirm level for every skill in this group}}
+terraform: { name: Infrastructure as Code (Terraform), level: exploring, category: cloud }
+alerting-slos: { name: Alerting and SLOs, level: exploring, category: observability }
+gitops-controller: { name: A GitOps controller (Argo CD or Flux), level: exploring, category: cicd }
+k8s-cert:
+  {
+    name: 'Kubernetes certification path {{TODO: pick what is true}}',
+    level: exploring,
+    category: containers,
+  }

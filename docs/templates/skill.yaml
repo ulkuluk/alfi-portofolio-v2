@@ -1,0 +1,6 @@
+# Paste into src/content/skills.yaml. The key (first line) must be unique.
+#   level:    hands-on (used in a real project) | familiar | exploring
+#   category: cloud | containers | cicd | security | observability | networking | linux | web
+#   projects: case study slugs where I used it (optional; the build fails on a wrong slug)
+example-skill:
+  { name: Example skill, level: familiar, category: linux, projects: [openbao-migration] }

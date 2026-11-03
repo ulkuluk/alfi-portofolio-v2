@@ -1,0 +1,60 @@
+# One item per entry; the key is a unique id.
+#   kind:  timeline (past to present) | current (learning now) | next (up next)
+#   order: lower comes first within its kind
+
+# ---- Timeline --------------------------------------------------------------
+web-development:
+  kind: timeline
+  order: 1
+  period: Sep – Nov 2025
+  title: Web development
+  text: Built a real-time ticket monitoring app on Node.js, PostgreSQL and Google Cloud.
+bootcamp:
+  kind: timeline
+  order: 2
+  period: Apr – Aug 2026
+  title: Bootcamp
+  text: Containerization, GitOps, Kubernetes, GitLab CI and monitoring.
+team-project:
+  kind: timeline
+  order: 3
+  period: From Apr 2026
+  title: Team project
+  text: Built cloud infrastructure from scratch.
+kumparan:
+  kind: timeline
+  order: 4
+  period: From Aug 2026
+  title: Site reliability at Kumparan
+  text: Secret management and container image distribution.
+now:
+  kind: timeline
+  order: 5
+  period: Now
+  title: '{{TODO: what "now" means for me}}'
+
+# ---- Currently learning ----------------------------------------------------
+current-now:
+  kind: current
+  order: 1
+  title: '{{TODO: what I am learning right now}}'
+
+# ---- Next up ---------------------------------------------------------------
+next-iac:
+  kind: next
+  order: 1
+  title: Infrastructure as Code with Terraform
+  text: To codify the infrastructure I built by hand.
+next-monitoring:
+  kind: next
+  order: 2
+  title: Monitoring, alerting and SLOs
+  text: '{{TODO: confirm SLOs are on the list}}'
+next-gitops:
+  kind: next
+  order: 3
+  title: A GitOps controller, Argo CD or Flux
+next-cert:
+  kind: next
+  order: 4
+  title: 'Kubernetes certification path {{TODO: pick what is true}}'

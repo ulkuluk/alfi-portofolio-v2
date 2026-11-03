@@ -16,7 +16,7 @@ export default [
   {
     files: ['scripts/**/*.mjs', '*.mjs', '*.js'],
     languageOptions: {
-      globals: { process: 'readonly', console: 'readonly' },
+      globals: { process: 'readonly', console: 'readonly', Buffer: 'readonly' },
     },
   },
 ];

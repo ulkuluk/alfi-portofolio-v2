@@ -1,9 +1,9 @@
 # web-porto-v2
 
-Personal portfolio of an aspiring DevOps engineer. Static site built with Astro.
+Personal portfolio of a DevOps / SRE engineer early in their career. Static site built with Astro.
 
-> Status: Phases 1 and 2 are done (foundation, content model, four case studies). Remaining
-> home sections and full docs follow in later phases.
+> Status: Phases 1 to 3 are done (foundation, case studies, all home sections, SEO). Phase 4
+> (accessibility and performance pass, full docs) is next.
 
 ## Quick start
 
@@ -26,22 +26,24 @@ npm run dev      # http://localhost:4321
 | `npm run check`        | `astro check` (TypeScript and templates)                  |
 | `npm run check:todo`   | List every TODO placeholder (`-- --strict` fails if any)  |
 | `npm run lhci`         | Lighthouse CI against `dist/` (run `npm run build` first) |
+| `npm run og`           | Regenerate `public/og.png` from the name and role         |
 
 ## Folder map
 
 ```
 .github/        workflows (ci.yml, deploy.yml) and dependabot.yml
-docs/           CONTENT-TODO.md, templates/project.md (and, later, the content guide)
-public/         _headers, robots.txt, favicon, theme-init.js
-scripts/        check-todo.mjs
+docs/           CONTENT-TODO.md, templates/ (project, experience, skill, learning)
+public/         _headers, robots.txt, favicon, og.png, theme-init.js
+scripts/        check-todo.mjs, make-og.mjs
 src/
   assets/diagrams/  one inline SVG per case study
-  components/   Header, Footer, ThemeToggle, ProjectCard
-  config/       site.ts, the single source of personal data
-  content/projects/  one Markdown file per case study
-  content.config.ts  Zod schema for the projects collection
-  layouts/      BaseLayout, CaseStudyLayout
-  lib/          projects.ts (loading, ordering, structure checks)
+  components/   Header, Footer, ThemeToggle, SectionHeading, Hero, ProjectCard, About,
+                ExperienceList, Skills, LearningJourney, Contact
+  config/       site.ts, the single source of personal data and copy
+  content/      projects/*.md, experience/*.md, skills.yaml, learning.yaml
+  content.config.ts  Zod schemas for all four collections
+  layouts/      BaseLayout (SEO, JSON-LD), CaseStudyLayout
+  lib/          projects.ts (loading, ordering, structure checks), skills.ts
   pages/        index, 404, colophon, projects/[...slug]
   styles/       global.css, the only place design tokens live
 Dockerfile, compose.yaml, nginx.conf, nginx-security-headers.conf
@@ -55,6 +57,24 @@ Dockerfile, compose.yaml, nginx.conf, nginx-security-headers.conf
    classes) and set `diagram:` in the front matter.
 4. `npm run build`. The card on the home page, the detail page and the prev/next links appear
    on their own. A mistake fails the build and names the file and field.
+
+## Add a job, skill or learning item
+
+- **Job or course:** copy `docs/templates/experience.md` to `src/content/experience/<slug>.md`.
+  `order` sets the position (newest = 1). A `project:` slug links to a case study.
+- **Skill:** paste a block from `docs/templates/skill.yaml` into `src/content/skills.yaml`.
+  Pick `hands-on`, `familiar` or `exploring`; there are no percentage bars.
+- **Learning item:** paste a block from `docs/templates/learning.yaml` into
+  `src/content/learning.yaml` (`timeline`, `current` or `next`).
+- A wrong field or project slug fails the build and names the file.
+
+## Other switches in `src/config/site.ts`
+
+- `availability.show`: show or hide the "open to roles" line in the hero (hidden now).
+- `portrait`: set a path under `public/` to show a portrait next to the hero text.
+- `contact.resume`: the résumé button shows only if that file exists in `public/`.
+- `contact.now`: an optional short "Now" note in the contact section.
+- After changing the name or role, run `npm run og` and commit `public/og.png`.
 
 ## Change the accent colour or fonts
 
@@ -119,6 +139,18 @@ Prod-like local check: `docker compose up --build`, then open <http://localhost:
 - **Diagrams.** Inline SVG imported with `?raw`. They style themselves with CSS classes from
   `global.css` (the CSP blocks `style` attributes), so they follow light and dark mode.
 - **Drafts.** `draft: true` projects show in `npm run dev` and are dropped from production builds.
+- **Positioning.** "DevOps / SRE engineer, early in my career". Kumparan work is `type: work`
+  (an enum value added alongside `internship`, which stays for the KAI internship).
+- **Extra skill category.** Skills use the brief's seven categories plus "Web & Data" so that
+  Node.js and PostgreSQL have a home.
+- **Skill confirmation markers.** The Appendix C skills carry one TODO per level group, not one
+  per line; the three skills added from the KAI internship carry their own.
+- **OG image.** A static PNG rendered by `scripts/make-og.mjs` with `sharp`, using system fonts.
+  Regenerate it with `npm run og`.
+- **Canonical URLs.** Built pages are `name.html` but the canonical and sitemap URLs drop the
+  extension, as served.
+- **Link checks.** The weekly external check skips `example.com` (placeholder domain) and
+  `linkedin.com` (it blocks bots).
 - **Placeholders.** Personal details are `{{TODO}}` markers in `src/config/site.ts`, tracked in
   `docs/CONTENT-TODO.md`.
 - **Known audit noise.** `npm audit` reports issues in `sharp` (pulled in by Astro for image

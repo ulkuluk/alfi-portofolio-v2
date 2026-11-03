@@ -2,6 +2,7 @@
 title: petepete Infrastructure
 summary: A new donation platform for content creators had no infrastructure, no pipeline, and no safe way for a team with changing IP addresses to reach its servers.
 type: team
+short: petepete
 org: petepete
 role: Built the infrastructure end to end
 period: April – October 2026

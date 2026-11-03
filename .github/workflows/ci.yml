@@ -94,6 +94,8 @@ jobs:
             --root-dir ${{ github.workspace }}/dist
             --fallback-extensions html
             --exclude TODO
+            --exclude 'example\.com'
+            --exclude 'linkedin\.com'
             --max-retries 2
             './dist/**/*.html'
           fail: true

@@ -1,0 +1,78 @@
+---
+import { getCollection } from 'astro:content';
+import { getProjects } from '../lib/projects';
+import SectionHeading from './SectionHeading.astro';
+
+const entries = (await getCollection('experience')).sort((a, b) => a.data.order - b.data.order);
+const projects = new Map((await getProjects()).map((project) => [project.id, project]));
+---
+
+<section id="experience" class="section border-t border-border" aria-labelledby="experience-title">
+  <div class="container-content">
+    <SectionHeading id="experience" />
+    <ol class="mt-10 space-y-12">
+      {entries.map(({ data }) => (
+        <li class="measure">
+          <div class="head">
+            <h3 class="text-lg">
+              {data.role}
+              <span class="org"> · {data.org}</span>
+            </h3>
+            <p class="tag">{data.period}</p>
+          </div>
+          {data.note && <p class="note">{data.note}</p>}
+          <ul class="mt-3 space-y-2">
+            {data.bullets.map((bullet) => {
+              const project = bullet.project ? projects.get(bullet.project.id) : undefined;
+              return (
+                <li>
+                  {bullet.text}
+                  {project && (
+                    <>
+                      {' '}
+                      <a href={`/projects/${project.id}`} class="case-link">
+                        Read the case study<span class="sr-only"> on {project.data.title}</span> →
+                      </a>
+                    </>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.25rem 1rem;
+  }
+  .org {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    color: var(--muted);
+  }
+  .note {
+    margin-top: 0.25rem;
+    font-size: 0.9375rem;
+    color: var(--muted);
+    font-style: italic;
+  }
+  ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  ul li::marker {
+    color: var(--muted);
+  }
+  .case-link {
+    white-space: nowrap;
+    font-weight: 600;
+  }
+</style>

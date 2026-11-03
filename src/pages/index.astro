@@ -1,42 +1,38 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
 import ProjectCard from '../components/ProjectCard.astro';
+import SectionHeading from '../components/SectionHeading.astro';
+import About from '../components/About.astro';
+import ExperienceList from '../components/ExperienceList.astro';
+import Skills from '../components/Skills.astro';
+import LearningJourney from '../components/LearningJourney.astro';
+import Contact from '../components/Contact.astro';
 import { site } from '../config/site';
 import { getProjects } from '../lib/projects';
 
 const projects = (await getProjects()).filter((project) => project.data.featured);
 
-// Phase 3 replaces these placeholders with the real sections.
-const placeholders = site.nav
-  .map((item) => ({ id: item.href.replace('/#', ''), label: item.label }))
-  .filter((section) => section.id !== 'projects');
+const person = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  jobTitle: site.jobTitle,
+  url: Astro.site?.href ?? site.url,
+  email: `mailto:${site.contact.email}`,
+  worksFor: { '@type': 'Organization', name: site.employer },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: site.alumniOf },
+  sameAs: [site.contact.github, site.contact.linkedin],
+};
 ---
 
-<BaseLayout>
-  <section class="section">
-    <div class="container-content">
-      <h1 class="measure text-4xl sm:text-5xl">{site.hero.headline}</h1>
-      <p class="measure mt-6 text-muted">
-        {site.name} · {site.title.toLowerCase()}
-      </p>
-      <p class="mt-8 flex flex-wrap gap-3">
-        <a class="btn btn-primary" href={site.hero.primaryCta.href}>
-          {site.hero.primaryCta.label}
-        </a>
-        <a class="btn" href={site.hero.secondaryCta.href}>
-          {site.hero.secondaryCta.label}
-        </a>
-      </p>
-      <p class="tag mt-6">{site.availability}</p>
-    </div>
-  </section>
+<BaseLayout jsonLd={person}>
+  <Hero />
 
   <section id="projects" class="section border-t border-border" aria-labelledby="projects-title">
     <div class="container-content">
-      <h2 id="projects-title" class="text-2xl">
-        Projects
-      </h2>
-      <ul class="mt-8 grid gap-6 md:grid-cols-2">
+      <SectionHeading id="projects" />
+      <ul class="mt-10 grid gap-6 md:grid-cols-2">
         {projects.map((project) => (
           <ProjectCard project={project} />
         ))}
@@ -44,17 +40,9 @@ const placeholders = site.nav
     </div>
   </section>
 
-  {placeholders.map((section) => (
-    <section
-      id={section.id}
-      class="section border-t border-border"
-      aria-labelledby={`${section.id}-title`}
-    >
-      <div class="container-content">
-        <h2 id={`${section.id}-title`} class="text-2xl">
-          {section.label}
-        </h2>
-      </div>
-    </section>
-  ))}
+  <About />
+  <ExperienceList />
+  <Skills />
+  <LearningJourney />
+  <Contact />
 </BaseLayout>

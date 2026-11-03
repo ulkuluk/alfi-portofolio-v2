@@ -1,0 +1,97 @@
+---
+import { getCollection } from 'astro:content';
+import SectionHeading from './SectionHeading.astro';
+
+const items = await getCollection('learning');
+const byKind = (kind: 'timeline' | 'current' | 'next') =>
+  items.filter((item) => item.data.kind === kind).sort((a, b) => a.data.order - b.data.order);
+
+const timeline = byKind('timeline');
+const current = byKind('current');
+const next = byKind('next');
+---
+
+<section id="learning" class="section border-t border-border" aria-labelledby="learning-title">
+  <div class="container-content">
+    <SectionHeading id="learning" />
+    <div class="layout mt-10">
+      <ol class="timeline">
+        {timeline.map(({ data }) => (
+          <li>
+            {data.period && <p class="tag">{data.period}</p>}
+            <h3 class="text-lg">{data.title}</h3>
+            {data.text && <p class="mt-1 text-muted">{data.text}</p>}
+          </li>
+        ))}
+      </ol>
+
+      <div class="space-y-10">
+        {current.length > 0 && (
+          <div>
+            <h3 class="text-lg">Currently learning</h3>
+            <ul class="mt-3 space-y-2">
+              {current.map(({ data }) => (
+                <li>{data.title}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {next.length > 0 && (
+          <div>
+            <h3 class="text-lg">Next up</h3>
+            <ul class="mt-3 space-y-2">
+              {next.map(({ data }) => (
+                <li>
+                  {data.title}
+                  {data.text && <span class="text-muted"> · {data.text}</span>}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .layout {
+    display: grid;
+    gap: 3.5rem;
+  }
+  @media (min-width: 1024px) {
+    .layout {
+      grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: 5rem;
+    }
+  }
+  .timeline {
+    margin-left: 0.25rem;
+    border-left: 1px solid var(--border);
+  }
+  .timeline li {
+    position: relative;
+    padding-left: 1.5rem;
+    padding-bottom: 2rem;
+  }
+  .timeline li:last-child {
+    padding-bottom: 0;
+  }
+  .timeline li::before {
+    content: '';
+    position: absolute;
+    left: -5px;
+    top: 0.45rem;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+  ul {
+    list-style: disc;
+    padding-left: 1.25rem;
+  }
+  ul li::marker {
+    color: var(--muted);
+  }
+</style>

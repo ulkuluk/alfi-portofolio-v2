@@ -3,7 +3,7 @@
 # Every field below is required unless marked optional. A mistake fails the build with a clear message.
 title: ''
 summary: '' # One sentence: the problem, not the tech.
-type: internship # internship | team | bootcamp | homelab
+type: work # work | internship | team | bootcamp | homelab
 org: ''
 role: ''
 period: '' # e.g. April – October 2026
@@ -11,6 +11,7 @@ status: '' # Be precise, e.g. "PoC validated" or "Deployed to UAT".
 order: 5 # Unique. Lower numbers come first.
 featured: true # Show a card on the home page.
 stack: [] # Plain text tags. The card shows the first four.
+# short: Short name # optional, used for small links (defaults to the title)
 # diagram: src/assets/diagrams/<slug>.svg # optional
 # repo: https://github.com/you/repo # optional, public URLs only
 draft: false # true = visible in `npm run dev`, left out of production builds.

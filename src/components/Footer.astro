@@ -9,9 +9,18 @@ const year = new Date().getFullYear();
     <p>
       © {year} {site.name}
     </p>
-    <p>
-      Built with <a href="https://astro.build">Astro</a> ·<a href={site.repo}>Source</a> ·
-      <a href="/colophon">Colophon</a>
-    </p>
+    <ul class="flex flex-wrap gap-x-2">
+      <li>
+        Built with <a href="https://astro.build">Astro</a>
+      </li>
+      <li aria-hidden="true">·</li>
+      <li>
+        <a href={site.repo}>Source</a>
+      </li>
+      <li aria-hidden="true">·</li>
+      <li>
+        <a href="/colophon">Colophon</a>
+      </li>
+    </ul>
   </div>
 </footer>

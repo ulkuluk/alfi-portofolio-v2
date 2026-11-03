@@ -1,0 +1,62 @@
+---
+import { site } from '../config/site';
+
+const { hero, availability, portrait, name, role } = site;
+---
+
+<section class="section" aria-labelledby="hero-title">
+  <div class="container-content hero">
+    <div>
+      <p class="tag">
+        {name} · {role}
+      </p>
+      <h1 id="hero-title" class="measure mt-4 text-4xl sm:text-5xl">
+        {hero.headline}
+      </h1>
+      <p class="measure mt-6 text-lg text-muted">{hero.intro}</p>
+      <p class="mt-8 flex flex-wrap gap-3">
+        <a class="btn btn-primary" href={hero.primaryCta.href}>
+          {hero.primaryCta.label}
+        </a>
+        <a class="btn" href={hero.secondaryCta.href}>
+          {hero.secondaryCta.label}
+        </a>
+      </p>
+      {availability.show && <p class="tag mt-6">{availability.text}</p>}
+    </div>
+    {portrait && (
+      <img
+        class="portrait"
+        src={portrait}
+        alt={`Portrait of ${name}`}
+        width="176"
+        height="176"
+        decoding="async"
+      />
+    )}
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: grid;
+    gap: 2.5rem;
+    align-items: center;
+  }
+  .portrait {
+    width: 8rem;
+    height: 8rem;
+    object-fit: cover;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+  }
+  @media (min-width: 768px) {
+    .hero:has(.portrait) {
+      grid-template-columns: 1fr auto;
+    }
+    .portrait {
+      width: 11rem;
+      height: 11rem;
+    }
+  }
+</style>

@@ -1,10 +1,11 @@
 ---
 title: OpenBao Migration
 summary: Vault's licence change raised compliance and vendor-dependency risk, and its access model was getting harder to manage as services and people grew.
-type: internship
+type: work
+short: OpenBao
 org: Kumparan
-role: DevOps Intern
-period: '{{TODO: internship dates}}'
+role: Site Reliability Engineer
+period: August 2026 – present
 status: In use in production
 order: 1
 featured: true

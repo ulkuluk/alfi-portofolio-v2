@@ -1,0 +1,70 @@
+---
+import { getSkillGroups } from '../lib/skills';
+import SectionHeading from './SectionHeading.astro';
+
+const groups = await getSkillGroups();
+---
+
+<section id="skills" class="section border-t border-border" aria-labelledby="skills-title">
+  <div class="container-content">
+    <SectionHeading id="skills" />
+    <div class="mt-10 space-y-14">
+      {groups.map((group) => (
+        <div>
+          <h3 class="text-xl">{group.label}</h3>
+          <p class="mt-1 text-muted">{group.blurb}</p>
+          <dl class="mt-6 grid gap-x-10 gap-y-6 sm:grid-cols-2">
+            {group.categories.map((category) => (
+              <div>
+                <dt class="tag">{category.label}</dt>
+                <dd class="mt-2">
+                  <ul class="space-y-1.5">
+                    {category.skills.map((skill) => (
+                      <li>
+                        {skill.name}
+                        {skill.projects.length > 0 && (
+                          <>
+                            <span class="used"> · </span>
+                            <ul class="used links" aria-label="Used in">
+                              {skill.projects.map((project) => (
+                                <li>
+                                  <a href={`/projects/${project.id}`}>{project.label}</a>
+                                </li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .used {
+    font-size: 0.875rem;
+    color: var(--muted);
+  }
+  .links,
+  .links li {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .links li + li::before {
+    content: ', ';
+    color: var(--muted);
+  }
+  .links a {
+    display: inline-block;
+    padding-block: 0.125rem;
+  }
+</style>
