@@ -105,23 +105,26 @@ The only client JS is the theme toggle and the mobile menu.
 | `prettier`, `prettier-plugin-astro`                                | Formatting                                    |
 | `@lhci/cli`                                                        | Lighthouse budgets in CI                      |
 
-## Deploy (Cloudflare Pages via GitHub Actions)
+## Deploy (Cloudflare Workers Builds)
 
-Full steps are in [`docs/DEPLOY.md`](docs/DEPLOY.md). In short:
+**Cloudflare Workers Builds** connects directly to this GitHub repository and handles
+the deploy itself — no deploy secrets in GitHub Actions are needed.
 
-1. Create a Cloudflare Pages project (dashboard or `wrangler pages project create`).
-2. Add two **secrets** to the GitHub repo: `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
-   - Token scope: **Cloudflare Pages: Edit** on your account.
-   - Account ID: shown on the Cloudflare dashboard sidebar.
-3. Add three **variables**: `CLOUDFLARE_PROJECT_NAME`, `SITE_URL`, and (temporarily)
-   `ALLOW_TODO=1` while placeholders remain. Remove `ALLOW_TODO` before going public.
-4. Update `url` in `src/config/site.ts` and the `Sitemap:` line in `public/robots.txt`
+On every push to `main`, Cloudflare runs `npm run build` then `npx wrangler deploy`,
+reading `wrangler.jsonc` at the repo root (name, assets directory, 404 handling).
+
+Full setup steps are in [`docs/DEPLOY.md`](docs/DEPLOY.md). In short:
+
+1. In the Cloudflare dashboard: **Workers & Pages → Create → Worker → Connect to Git**,
+   pick this repo, set build command `npm run build` and deploy command `npx wrangler deploy`.
+2. Add one **variable** to the GitHub repo: `SITE_URL=https://yourdomain.com` (and
+   temporarily `ALLOW_TODO=1` while placeholders remain).
+3. Update `url` in `src/config/site.ts` and the `Sitemap:` line in `public/robots.txt`
    to match `SITE_URL`.
 
-Push to `main` → production deploy. Open a PR → preview URL on a unique subdomain.
-
-The deploy job skips without failing for Dependabot runs, fork PRs, or when the
-secrets/variables are missing.
+The GitHub Actions workflow (`deploy.yml`) is a **deploy gate only** — it checks for
+unresolved TODO placeholders on pushes to `main` and confirms the build passes.
+It does not call wrangler; Cloudflare builds and deploys independently.
 
 Prod-like local check: `docker compose up --build`, then open <http://localhost:8080>.
 
@@ -167,6 +170,8 @@ Prod-like local check: `docker compose up --build`, then open <http://localhost:
 - **Known audit noise.** `npm audit` reports issues in `sharp` (pulled in by Astro for image
   optimisation, unused here) and in Lighthouse CI dev tooling. The fix for `sharp` is Astro 7.
   Nothing from these ships to visitors.
+- **Security scan.** Full git history was scanned for tokens, passwords, API keys, private keys,
+  internal hostnames, IP addresses, account IDs, and bucket names. No secrets found.
 - **Render-blocking assets.** `theme-init.js` and the CSS bundle appear as render-blocking in
   Lighthouse. Both are intentional: the CSP allows only `'self'` (no `'unsafe-inline'`), so
   the theme script must be an external file, and inlining CSS is disabled to keep the same
@@ -179,6 +184,8 @@ Prod-like local check: `docker compose up --build`, then open <http://localhost:
 - **`npm run og` regenerates both `public/og.png` and `public/favicon.svg`.** Both read
   `--accent-base` from `src/styles/global.css`, so they stay in sync with the accent colour
   automatically after running the script.
-- **Security scan.** Full git history was scanned for tokens, passwords, API keys, private keys,
-  internal hostnames, IP addresses, account IDs, and bucket names. No secrets found.
-  All Cloudflare credentials are referenced only as `${{ secrets.NAME }}` placeholders.
+- **Deploy via Workers Builds, not GitHub Actions.** Cloudflare Workers Builds connects
+  directly to GitHub and runs `npm run build` + `npx wrangler deploy` on every push,
+  reading `wrangler.jsonc`. The GitHub Actions `deploy.yml` is a gate only: it blocks
+  a push to `main` when unresolved TODO placeholders remain, and confirms the build
+  passes. No deploy secrets are needed in GitHub.

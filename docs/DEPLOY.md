@@ -1,73 +1,86 @@
 # Deploy guide
 
-How to get the site live on Cloudflare Pages, with a GitHub Actions deploy pipeline.
-Fallback instructions for GitHub Pages are at the end (as a reference, not an active workflow).
+How the site is deployed via **Cloudflare Workers Builds** (connected directly to GitHub),
+with a fallback snippet for GitHub Pages at the end.
+
+---
+
+## How Workers Builds works
+
+Cloudflare Workers Builds watches this repository on GitHub. On every push it:
+
+1. Clones the repo and runs the **build command** (`npm run build`).
+2. Runs the **deploy command** (`npx wrangler deploy`).
+3. Reads `wrangler.jsonc` at the repo root to know the Worker name, assets directory,
+   and 404 handling. No extra configuration is needed in the workflow.
+
+The `wrangler.jsonc` in this repo is already configured:
+
+```jsonc
+{
+  "name": "alfi-portofolio-v2",
+  "compatibility_date": "2026-11-03",
+  "assets": {
+    "directory": "./dist",
+    "not_found_handling": "404-page"
+  }
+}
+```
 
 ---
 
 ## Prerequisites
 
 - A Cloudflare account (free tier is enough).
-- A GitHub repository containing this project.
+- The GitHub repository connected to Cloudflare Workers Builds (one-time setup below).
 - Node 22 installed locally (see `.nvmrc`).
 
 ---
 
-## 1. Create the Cloudflare Pages project
+## 1. Connect the repository to Workers Builds
 
-### Option A — Cloudflare dashboard (recommended for first-timers)
+1. Go to **Cloudflare dashboard → Workers & Pages → Create → Worker**.
+2. Choose **Connect to Git** and authorise GitHub.
+3. Pick this repository and set:
+   | Field           | Value               |
+   |-----------------|---------------------|
+   | Build command   | `npm run build`     |
+   | Deploy command  | `npx wrangler deploy` |
+   | Root directory  | *(leave blank)*     |
+4. Click **Save and Deploy**. Cloudflare runs the first build and deploy from its own
+   infrastructure. Every subsequent push to `main` triggers a new deploy automatically.
 
-1. Go to **Cloudflare → Workers & Pages → Create → Pages → Connect to Git**.
-2. Authorise GitHub and pick this repository.
-3. Set the build settings:
-   | Field                  | Value           |
-   | ---------------------- | --------------- |
-   | Framework preset       | Astro           |
-   | Build command          | `npm run build` |
-   | Build output directory | `dist`          |
-   | Root directory         | _(leave blank)_ |
-4. Click **Save and Deploy**. Cloudflare runs the first build from its own CI.
-   After this, you will use GitHub Actions instead (below).
-
-### Option B — Wrangler CLI
-
-```sh
-npx wrangler pages project create <your-project-name> --production-branch main
-```
+> **No GitHub Actions token needed for deploying.** Workers Builds has its own
+> Cloudflare-side integration. The GitHub Actions workflow (`deploy.yml`) only
+> checks for unresolved TODO placeholders and confirms the build passes — it does
+> not call wrangler.
 
 ---
 
-## 2. Get a Cloudflare API token
+## 2. Get a Cloudflare API token (optional — only needed locally)
+
+If you want to run `npx wrangler deploy` from your own machine:
 
 1. Go to **Cloudflare → My Profile → API Tokens → Create Token**.
-2. Use the **Edit Cloudflare Workers** template, or create a custom token with:
-   - **Account** — Cloudflare Pages: Edit
-   - **Zone** — (none required unless you add a custom domain through the API)
-3. Copy the token — you can only see it once.
+2. Use the **Edit Cloudflare Workers** template (gives Workers: Edit on your account).
+3. Copy the token and set it in your shell: `export CLOUDFLARE_API_TOKEN=…`
 
-Find your **Account ID** on the Cloudflare dashboard right sidebar (any zone overview page
-shows it, or go to **Workers & Pages** and look at the URL: `dash.cloudflare.com/<account-id>/…`).
+Find your **Account ID** in the Cloudflare dashboard sidebar (any zone page, or the URL
+`dash.cloudflare.com/<account-id>/…`).
 
 ---
 
-## 3. Add secrets and variables to GitHub
+## 3. GitHub repository variables
 
-In your GitHub repository go to **Settings → Secrets and variables → Actions**.
+In **Settings → Secrets and variables → Actions → Variables** (not secrets):
 
-### Secrets (encrypted, never shown in logs)
+| Name         | Value                         | Notes                                                                              |
+|--------------|-------------------------------|------------------------------------------------------------------------------------|
+| `SITE_URL`   | e.g. `https://yourdomain.com` | Used to build canonical URLs; must match `url` in `src/config/site.ts`             |
+| `ALLOW_TODO` | `1`                           | Set while any TODO placeholder remains. Remove it before going fully public.       |
 
-| Name                    | Value                      |
-| ----------------------- | -------------------------- |
-| `CLOUDFLARE_API_TOKEN`  | The API token from step 2  |
-| `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID |
-
-### Variables (visible in logs, not secret)
-
-| Name                      | Value                         | Notes                                                                             |
-| ------------------------- | ----------------------------- | --------------------------------------------------------------------------------- |
-| `CLOUDFLARE_PROJECT_NAME` | e.g. `alfi-portfolio`         | Must match the Pages project name                                                 |
-| `SITE_URL`                | e.g. `https://yourdomain.com` | Used to build canonical URLs; must match `url` in `src/config/site.ts`            |
-| `ALLOW_TODO`              | `1`                           | Set this while any TODO placeholder remains. Remove it before going fully public. |
+> `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` are **not** needed as GitHub
+> secrets — Workers Builds authenticates on Cloudflare's side, not through Actions.
 
 ---
 
@@ -89,45 +102,47 @@ canonical URL and the sitemap.
 
 ---
 
-## 5. How the deploy pipeline works
+## 5. How the GitHub Actions workflow fits in
 
-`deploy.yml` runs on every push to `main` and on every pull request.
+`deploy.yml` is renamed **"Deploy gate"** and does **not** call wrangler. Its role:
 
-| Trigger        | Branch passed to Wrangler | Result                                       |
-| -------------- | ------------------------- | -------------------------------------------- |
-| Push to `main` | `main`                    | Cloudflare promotes it to the production URL |
-| Pull request   | PR branch name            | Cloudflare creates a unique preview URL      |
+| Trigger        | What it does                                                        |
+|----------------|---------------------------------------------------------------------|
+| Push to `main` | Fails if any TODO placeholder remains (unless `ALLOW_TODO=1`); runs build |
+| Pull request   | Runs build only (placeholders are allowed on PRs)                   |
 
-The job skips (without failing) when:
-
-- The actor is Dependabot.
-- The PR comes from a fork (forks have no access to secrets).
-- `CLOUDFLARE_API_TOKEN` or `CLOUDFLARE_ACCOUNT_ID` are not set.
-- `CLOUDFLARE_PROJECT_NAME` is not set.
-
-The main-branch deploy fails if any TODO placeholder remains — unless `ALLOW_TODO=1`.
+Workers Builds handles the actual deploy independently on every push to `main`.
+The two pipelines are complementary: Actions blocks a bad push before Cloudflare
+ever sees it.
 
 ---
 
 ## 6. Custom domain
 
-1. In Cloudflare Pages, open your project → **Custom domains → Set up a custom domain**.
-2. Enter your domain (e.g. `yourdomain.com` or `portfolio.yourdomain.com`).
-3. Cloudflare adds a CNAME record automatically if the domain is on Cloudflare DNS.
-   For external DNS, add the CNAME manually as instructed.
+1. In the Cloudflare dashboard, open the Worker → **Settings → Domains & Routes →
+   Add → Custom domain**.
+2. Enter your domain (e.g. `yourdomain.com`).
+3. If the domain uses Cloudflare DNS, the record is added automatically.
+   For external DNS, add the CNAME as instructed.
 4. HTTPS is provisioned automatically.
 
 ---
 
-## 7. Verify the deploy
+## 7. Preview deployments
+
+Workers Builds can create preview deployments for branches other than `main`.
+Configure this in the Cloudflare dashboard under the Worker's **Build configuration →
+Branch deploy controls**. Each push to a non-main branch gets a unique preview URL.
+
+---
+
+## 8. Verify the deploy
 
 After the first successful deploy:
 
 ```sh
-# Check canonical and sitemap URLs are correct
 curl -I https://yourdomain.com
 curl https://yourdomain.com/sitemap-index.xml
-# Check security headers
 curl -I https://yourdomain.com | grep -i "content-security-policy\|x-content-type"
 ```
 
@@ -186,8 +201,8 @@ jobs:
         uses: actions/deploy-pages@v4
 ```
 
-**Limitations vs Cloudflare Pages:**
+**Limitations vs Workers Builds:**
 
 - No `_headers` support → CSP and other security headers are absent.
-- Preview deployments per PR are not built-in.
+- Preview deployments per branch are not built-in.
 - Build minutes on free tier are limited.
