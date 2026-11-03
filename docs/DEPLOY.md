@@ -20,12 +20,12 @@ Fallback instructions for GitHub Pages are at the end (as a reference, not an ac
 1. Go to **Cloudflare → Workers & Pages → Create → Pages → Connect to Git**.
 2. Authorise GitHub and pick this repository.
 3. Set the build settings:
-   | Field | Value |
-   |---|---|
-   | Framework preset | Astro |
-   | Build command | `npm run build` |
-   | Build output directory | `dist` |
-   | Root directory | *(leave blank)* |
+   | Field                  | Value           |
+   | ---------------------- | --------------- |
+   | Framework preset       | Astro           |
+   | Build command          | `npm run build` |
+   | Build output directory | `dist`          |
+   | Root directory         | _(leave blank)_ |
 4. Click **Save and Deploy**. Cloudflare runs the first build from its own CI.
    After this, you will use GitHub Actions instead (below).
 
@@ -56,18 +56,18 @@ In your GitHub repository go to **Settings → Secrets and variables → Actions
 
 ### Secrets (encrypted, never shown in logs)
 
-| Name | Value |
-|---|---|
-| `CLOUDFLARE_API_TOKEN` | The API token from step 2 |
+| Name                    | Value                      |
+| ----------------------- | -------------------------- |
+| `CLOUDFLARE_API_TOKEN`  | The API token from step 2  |
 | `CLOUDFLARE_ACCOUNT_ID` | Your Cloudflare account ID |
 
 ### Variables (visible in logs, not secret)
 
-| Name | Value | Notes |
-|---|---|---|
-| `CLOUDFLARE_PROJECT_NAME` | e.g. `alfi-portfolio` | Must match the Pages project name |
-| `SITE_URL` | e.g. `https://yourdomain.com` | Used to build canonical URLs; must match `url` in `src/config/site.ts` |
-| `ALLOW_TODO` | `1` | Set this while any TODO placeholder remains. Remove it before going fully public. |
+| Name                      | Value                         | Notes                                                                             |
+| ------------------------- | ----------------------------- | --------------------------------------------------------------------------------- |
+| `CLOUDFLARE_PROJECT_NAME` | e.g. `alfi-portfolio`         | Must match the Pages project name                                                 |
+| `SITE_URL`                | e.g. `https://yourdomain.com` | Used to build canonical URLs; must match `url` in `src/config/site.ts`            |
+| `ALLOW_TODO`              | `1`                           | Set this while any TODO placeholder remains. Remove it before going fully public. |
 
 ---
 
@@ -93,12 +93,13 @@ canonical URL and the sitemap.
 
 `deploy.yml` runs on every push to `main` and on every pull request.
 
-| Trigger | Branch passed to Wrangler | Result |
-|---|---|---|
-| Push to `main` | `main` | Cloudflare promotes it to the production URL |
-| Pull request | PR branch name | Cloudflare creates a unique preview URL |
+| Trigger        | Branch passed to Wrangler | Result                                       |
+| -------------- | ------------------------- | -------------------------------------------- |
+| Push to `main` | `main`                    | Cloudflare promotes it to the production URL |
+| Pull request   | PR branch name            | Cloudflare creates a unique preview URL      |
 
 The job skips (without failing) when:
+
 - The actor is Dependabot.
 - The PR comes from a fork (forks have no access to secrets).
 - `CLOUDFLARE_API_TOKEN` or `CLOUDFLARE_ACCOUNT_ID` are not set.
@@ -186,6 +187,7 @@ jobs:
 ```
 
 **Limitations vs Cloudflare Pages:**
+
 - No `_headers` support → CSP and other security headers are absent.
 - Preview deployments per PR are not built-in.
 - Build minutes on free tier are limited.

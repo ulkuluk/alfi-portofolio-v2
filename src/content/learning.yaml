@@ -58,4 +58,3 @@ next-cert:
   kind: next
   order: 4
   title: 'Kubernetes certification path {{TODO: pick what is true}}'
-
