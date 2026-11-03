@@ -11,6 +11,7 @@ const skipFiles = new Set([
   'devops-portfolio-agent-prompt.md',
   'CONTENT-TODO.md',
   'CONTENT-GUIDE.md',
+  'DEPLOY.md',
   'README.md',
   'check-todo.mjs',
 ]);

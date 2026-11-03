@@ -2,8 +2,8 @@
 
 Personal portfolio of a DevOps / SRE engineer early in their career. Static site built with Astro.
 
-> Status: Phases 1 to 3 are done (foundation, case studies, all home sections, SEO). Phase 4
-> (accessibility and performance pass, full docs) is next.
+> Status: All four phases complete. Fill the `{{TODO}}` placeholders in `src/config/site.ts`
+> and content files, then set the GitHub secrets described in `docs/DEPLOY.md` to go live.
 
 ## Quick start
 
@@ -78,9 +78,13 @@ Dockerfile, compose.yaml, nginx.conf, nginx-security-headers.conf
 
 ## Change the accent colour or fonts
 
-- Accent: edit `--accent` (and `--on-accent` if contrast needs it) in `src/styles/global.css`.
-  Light and dark values are separate; each is one line.
-- Fonts: swap the two `@font-face` blocks at the top of `src/styles/global.css` and the
+- **Accent:** edit `--accent-base` in `src/styles/global.css` (light mode, around line 37).
+  Dark mode derives a lighter tint automatically with `color-mix`. That is the only line you need
+  to change. **Exception:** if you switch to a very light accent colour, `--on-accent` (the text
+  drawn on top of accent fills) may need to change from `#ffffff` to a dark value — check contrast
+  manually. After changing the accent run `npm run og` and commit both `public/og.png` and
+  `public/favicon.svg`.
+- **Fonts:** swap the two `@font-face` blocks at the top of `src/styles/global.css` and the
   matching `@fontsource-variable/*` dependency.
 
 ## Why this stack
@@ -103,14 +107,21 @@ The only client JS is the theme toggle and the mobile menu.
 
 ## Deploy (Cloudflare Pages via GitHub Actions)
 
-Full steps arrive in Phase 4. In short, `deploy.yml` needs:
+Full steps are in [`docs/DEPLOY.md`](docs/DEPLOY.md). In short:
 
-- Secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`
-- Variables: `CLOUDFLARE_PROJECT_NAME`, `SITE_URL`, and (temporarily) `ALLOW_TODO=1` while
-  placeholders remain. The main deploy fails on any unresolved TODO otherwise.
+1. Create a Cloudflare Pages project (dashboard or `wrangler pages project create`).
+2. Add two **secrets** to the GitHub repo: `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID`.
+   - Token scope: **Cloudflare Pages: Edit** on your account.
+   - Account ID: shown on the Cloudflare dashboard sidebar.
+3. Add three **variables**: `CLOUDFLARE_PROJECT_NAME`, `SITE_URL`, and (temporarily)
+   `ALLOW_TODO=1` while placeholders remain. Remove `ALLOW_TODO` before going public.
+4. Update `url` in `src/config/site.ts` and the `Sitemap:` line in `public/robots.txt`
+   to match `SITE_URL`.
 
-The deploy job never fails just because it cannot deploy: for Dependabot runs, fork PRs, or
-when the Cloudflare secrets/variables are missing, it skips with a notice and a job summary.
+Push to `main` → production deploy. Open a PR → preview URL on a unique subdomain.
+
+The deploy job skips without failing for Dependabot runs, fork PRs, or when the
+secrets/variables are missing.
 
 Prod-like local check: `docker compose up --build`, then open <http://localhost:8080>.
 
@@ -156,3 +167,18 @@ Prod-like local check: `docker compose up --build`, then open <http://localhost:
 - **Known audit noise.** `npm audit` reports issues in `sharp` (pulled in by Astro for image
   optimisation, unused here) and in Lighthouse CI dev tooling. The fix for `sharp` is Astro 7.
   Nothing from these ships to visitors.
+- **Render-blocking assets.** `theme-init.js` and the CSS bundle appear as render-blocking in
+  Lighthouse. Both are intentional: the CSP allows only `'self'` (no `'unsafe-inline'`), so
+  the theme script must be an external file, and inlining CSS is disabled to keep the same
+  policy. Scores stay at 100 because the files are tiny and cached; the trade-off is
+  documented here rather than hidden.
+- **Accent centralised.** All colour mode values derive from `--accent-base`. Dark mode uses
+  `color-mix(in oklab, var(--accent-base) 50%, white)` instead of a hard-coded second value,
+  so changing the accent is a one-line edit. `--on-accent` (text on accent fills) is still
+  hard-coded and needs a manual contrast check if a light accent is chosen.
+- **`npm run og` regenerates both `public/og.png` and `public/favicon.svg`.** Both read
+  `--accent-base` from `src/styles/global.css`, so they stay in sync with the accent colour
+  automatically after running the script.
+- **Security scan.** Full git history was scanned for tokens, passwords, API keys, private keys,
+  internal hostnames, IP addresses, account IDs, and bucket names. No secrets found.
+  All Cloudflare credentials are referenced only as `${{ secrets.NAME }}` placeholders.
